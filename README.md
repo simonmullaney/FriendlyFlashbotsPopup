@@ -1,14 +1,8 @@
-# AngularChromeExtension
+# FriendlyFlashbotsPopup
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
+This project is designed to be able to develop a Google Chrome extension to be able to send Flashbots Bundles directly from your browser.
 
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+This current version is still in development and thus only interacts with the Ethereum Goerli network.
 
 ## Build
 

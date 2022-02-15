@@ -1,0 +1,16 @@
+.body { background: radial-gradient(#ffe6bd, #ffff);}
+.column {
+  float: left;
+}
+.left {
+  width: 20%;
+}
+.middle {
+  width: 55%;
+}
+.right {
+  width: 250%;
+  align-items: right;
+  padding-top: 22px;
+}
+.form{background: radial-gradient(#ffe6bd, #ffff);}
