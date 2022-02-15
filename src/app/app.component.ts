@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
         maxFeePerGas:Number,
         maxPriorityFeePerGas:Number
       };
-      console.log(this.myGroup);
+      // console.log(this.myGroup);
       try {
         transaction.privateKey =  this.myGroup.value.privateKey;
         transaction.transactionType = this.myGroup.value.transactionType;
