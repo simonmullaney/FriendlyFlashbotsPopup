@@ -38,11 +38,11 @@ export class FlashbotsService {
         [{
           transaction:{
             chainId: CHAIN_ID,
-            type: 2,
-            value: ETHER / 100n * 3n,
+            type: transaction.type,
+            value: ETHER / 100n * BigInt(transaction.value),
             data: transaction.data,
-            maxFeePerGas: GWEI * 3n,//3
-            maxPriorityFeePerGas: GWEI * 2n,//2
+            maxFeePerGas: GWEI * transaction.maxFeePerGas,// 3n,//3
+            maxPriorityFeePerGas: GWEI * transaction.maxPriorityFeePerGas, //2n,//2
             to: transaction.to
           },
           signer:WALLET

@@ -30,24 +30,18 @@ export class AppComponent implements OnInit {
     }
 
     async handleSubmit() {
-      let transaction = {
-        data:String,
-        to:String,
-        privateKey: String,
-        transactionType: Number,
-        value:Number,
-        maxFeePerGas:Number,
-        maxPriorityFeePerGas:Number
-      };
-      // console.log(this.myGroup);
+      let transaction:any = {};
+
       try {
         transaction.privateKey =  this.myGroup.value.privateKey;
-        transaction.transactionType = this.myGroup.value.transactionType;
         transaction.data = this.myGroup.value.data;
+        transaction.type = Number(this.myGroup.value.transactionType)
         transaction.to = this.myGroup.value.to;
         transaction.value = this.myGroup.value.value;
-        transaction.maxFeePerGas = this.myGroup.value.maxFeePerGas;
-        transaction.maxPriorityFeePerGas = this.myGroup.value.maxPriorityFeePerGas;
+        transaction.maxFeePerGas = BigInt(this.myGroup.value.maxFeePerGas);
+        transaction.maxPriorityFeePerGas = BigInt(this.myGroup.value.maxPriorityFeePerGas);
+
+
 
         this.flashbotsService.submitFlashbotsBundle(transaction)
 
