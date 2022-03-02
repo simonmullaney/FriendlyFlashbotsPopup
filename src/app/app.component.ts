@@ -41,8 +41,6 @@ export class AppComponent implements OnInit {
         transaction.maxFeePerGas = BigInt(this.myGroup.value.maxFeePerGas);
         transaction.maxPriorityFeePerGas = BigInt(this.myGroup.value.maxPriorityFeePerGas);
 
-
-
         this.flashbotsService.submitFlashbotsBundle(transaction)
 
       } catch (error) {

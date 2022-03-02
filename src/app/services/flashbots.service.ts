@@ -58,10 +58,6 @@ export class FlashbotsService {
         let bsr = await bundleSubmitResponse.wait();
         if(!bsr){
           console.log("Successful Falshbots Bundle sent in block: " + (blockNumber + 1));
-          // console.log(bsr);
-          // console.log(bundleSubmitResponse.bundleTransactions);
-          // console.log(bundleSubmitResponse.bundleTransactions[0]);
-          // console.log(bundleSubmitResponse.bundleTransactions[0].hash);
           __this.loading = false;
           __this.txHash = "https://goerli.etherscan.io/tx/"+bundleSubmitResponse.bundleTransactions[0].hash;
           console.log(__this.txHash);
