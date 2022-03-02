@@ -1,6 +1,8 @@
 {
   "name": "FriendlyFlashbotsPopup",
-  "version": "0.0.0",
+  "description":"Google Chrome extension to be able to send Flashbots Bundles directly from your browser",
+  "version": "1.0.0",
+  "author":"Simon Mullaney",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

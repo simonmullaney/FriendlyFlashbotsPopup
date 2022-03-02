@@ -156,13 +156,20 @@ form { width: 400px;border-radius: 25px; }
                       <input type="text" formControlName="data" name="data" placeholder="Addtional hex data included in the transaction" id="data" autocomplete="address-level1" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
                   </div>
+                  <div class="grid grid-cols-6 p-5">
+                    <div class="col-span-5">
+                      <a href="https://github.com/simonmullaney/FriendlyFlashbotsPopup"target="_blank"><img src="../assets/octocat.png"  width="40"></a>
+                    </div>
+                    <div>
+                      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send
+                      </button>
+                      <app-loader *ngIf="this.flashbotsService.loading"></app-loader>
+                      <app-success-modal *ngIf="this.flashbotsService.successModal"></app-success-modal>
+                    </div>
+                  </div>
+
                 </div>
-                <div class="px-4 py-3 text-right sm:px-6">
-                  <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Send
-                  </button>
-                  <app-loader *ngIf="this.flashbotsService.loading"></app-loader>
-                  <app-success-modal *ngIf="this.flashbotsService.successModal"></app-success-modal>
-                </div>
+
               </div>
           </div>
         </div>
