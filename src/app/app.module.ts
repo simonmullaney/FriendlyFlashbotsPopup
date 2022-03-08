@@ -7,6 +7,8 @@ import { AppComponent } from './app.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SuccessModalComponent } from './components/success-modal/success-modal.component';
 import { FlashbotsService } from './services/flashbots.service';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { FlashbotsService } from './services/flashbots.service';
     BrowserModule,
     AppRoutingModule,
     FontAwesomeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [FormBuilder,FlashbotsService],
   bootstrap: [AppComponent]

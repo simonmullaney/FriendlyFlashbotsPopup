@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BigNumber, providers, Wallet } from "ethers";
 import { FlashbotsBundleProvider } from "@flashbots/ethers-provider-bundle";
-const CHAIN_ID = 5;
+// const CHAIN_ID = 5;
 const FLASHBOTS_GOERLI_ENDPOINT = "https://relay-goerli.flashbots.net/";
 const GWEI = 10n ** 9n;
 const ETHER = 10n ** 18n
 // const GWEI = BigInt(BigNumber.from(10).pow(9))
 // const ETHER = BigInt(BigNumber.from(10).pow(18))
-const provider = new providers.InfuraProvider(CHAIN_ID);
 
 
 @Injectable({
@@ -21,15 +20,14 @@ export class FlashbotsService {
   constructor() { }
 
   async submitFlashbotsBundle(transaction:any) {
+    const provider = new providers.InfuraProvider(transaction.network);
     this.loading = true;
     const WALLET = new Wallet(transaction.privateKey,provider);
 
     // Standard json rpc provider directly from ethers.js (NOT Flashbots)
     const flashbotsProvider = await FlashbotsBundleProvider.create(provider,Wallet.createRandom(),FLASHBOTS_GOERLI_ENDPOINT);
     // console.log("flashbotsProvider");
-    //
     // console.log(flashbotsProvider);
-
     var __this = this;
 
     provider.on('block', async(blockNumber) => {
@@ -37,7 +35,7 @@ export class FlashbotsService {
       const bundleSubmitResponse : any = await flashbotsProvider.sendBundle(
         [{
           transaction:{
-            chainId: CHAIN_ID,
+            chainId: transaction.network,
             type: transaction.type,
             value: ETHER / 100n * BigInt(transaction.value),
             data: transaction.data,
@@ -49,7 +47,6 @@ export class FlashbotsService {
         }],blockNumber + 1)
         .catch((err) => {
                __this.loading = false;
-               console.log('ere2: '+  __this.loading);
                console.log(err);
          });
         console.log("bundleSubmitResponse");

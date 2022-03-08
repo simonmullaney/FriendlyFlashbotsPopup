@@ -10,6 +10,12 @@ import { FlashbotsService } from './services/flashbots.service';
 export class AppComponent implements OnInit {
   myGroup: FormGroup;
 
+  selectedNetwork:any;
+  network:Array<any> = [
+      {id: 1, name: "Mainnet"},
+      {id: 5, name: "Goerli"}
+  ];
+
 
   constructor(
     formBuilder: FormBuilder,
@@ -17,6 +23,7 @@ export class AppComponent implements OnInit {
    ) {}
 
    ngOnInit() {
+     this.selectedNetwork = this.network[0];
      this.myGroup = new FormGroup({
        'privateKey': new FormControl(''),
        'to': new FormControl(''),
@@ -31,8 +38,12 @@ export class AppComponent implements OnInit {
 
     async handleSubmit() {
       let transaction:any = {};
+      console.log("Selected Network: ");
+      console.log(this.selectedNetwork);
+
 
       try {
+        transaction.network = this.selectedNetwork.id;
         transaction.privateKey =  this.myGroup.value.privateKey;
         transaction.data = this.myGroup.value.data;
         transaction.type = Number(this.myGroup.value.transactionType)
