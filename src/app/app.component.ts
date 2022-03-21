@@ -37,26 +37,28 @@ export class AppComponent implements OnInit {
     }
 
     async handleSubmit() {
+      var __this = this;
       let transaction:any = {};
-      console.log("Selected Network: ");
-      console.log(this.selectedNetwork);
+      // console.log("Selected Network: ");
+      // console.log(this.selectedNetwork);
+
+      transaction.network = this.selectedNetwork.id;
+      transaction.privateKey =  this.myGroup.value.privateKey;
+      transaction.data = this.myGroup.value.data;
+      transaction.type = Number(this.myGroup.value.transactionType)
+      transaction.to = this.myGroup.value.to;
+      transaction.value = this.myGroup.value.value;
+      transaction.maxFeePerGas = BigInt(this.myGroup.value.maxFeePerGas);
+      transaction.maxPriorityFeePerGas = BigInt(this.myGroup.value.maxPriorityFeePerGas);
+
+      this.flashbotsService.submitFlashbotsBundle(transaction)
+        .catch(function(err){
+          console.log('ere');
+          __this.flashbotsService.errorAlert = true;
+          __this.flashbotsService.loading = false;
+        });
 
 
-      try {
-        transaction.network = this.selectedNetwork.id;
-        transaction.privateKey =  this.myGroup.value.privateKey;
-        transaction.data = this.myGroup.value.data;
-        transaction.type = Number(this.myGroup.value.transactionType)
-        transaction.to = this.myGroup.value.to;
-        transaction.value = this.myGroup.value.value;
-        transaction.maxFeePerGas = BigInt(this.myGroup.value.maxFeePerGas);
-        transaction.maxPriorityFeePerGas = BigInt(this.myGroup.value.maxPriorityFeePerGas);
-
-        this.flashbotsService.submitFlashbotsBundle(transaction)
-
-      } catch (error) {
-        console.log(error);
-      }
 
 
     }

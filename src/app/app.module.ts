@@ -8,13 +8,15 @@ import { LoaderComponent } from './components/loader/loader.component';
 import { SuccessModalComponent } from './components/success-modal/success-modal.component';
 import { FlashbotsService } from './services/flashbots.service';
 import { FormsModule } from '@angular/forms';
+import { ErrorAlertComponent } from './components/alerts/error-alert/error-alert.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoaderComponent,
-    SuccessModalComponent
+    SuccessModalComponent,
+    ErrorAlertComponent
 
   ],
   imports: [

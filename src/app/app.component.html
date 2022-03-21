@@ -120,6 +120,7 @@ form { width: 400px;border-radius: 25px; }
           <div class="mt-5 md:mt-0 md:col-span-2">
               <div class="shadow overflow-hidden sm:rounded-md">
                 <div class="px-4 py-5 sm:p-6">
+                  <app-error-alert *ngIf="this.flashbotsService.errorAlert"></app-error-alert>
                   <div class="grid grid-cols-6 gap-6">
                     <div class="form-group col-span-6 sm:col-span-3">
                       <label for="privateKey" class="label-control block text-sm font-medium text-gray-700">Private Key:</label>
@@ -166,7 +167,6 @@ form { width: 400px;border-radius: 25px; }
                       <app-success-modal *ngIf="this.flashbotsService.successModal"></app-success-modal>
                     </div>
                   </div>
-
                 </div>
 
               </div>

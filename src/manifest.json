@@ -10,5 +10,5 @@
   },
   "icons": { "128": "./assets/icon.png" },
   "author": "Simon Mullaney",
-  "host_permissions": ["https://*/"]
+  "host_permissions": ["https://relay-goerli.flashbots.net/"]
 }

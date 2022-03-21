@@ -14,8 +14,10 @@ const ETHER = 10n ** 18n
 })
 export class FlashbotsService {
   loading = false;
+  errorAlert = false;
   successModal = false;
   txHash: String;
+  infoMessage: String = "Error, please retry again";
 
   constructor() { }
 
@@ -30,40 +32,42 @@ export class FlashbotsService {
     // console.log(flashbotsProvider);
     var __this = this;
 
-    provider.on('block', async(blockNumber) => {
-      console.log("Blocknumber: " + blockNumber);
-      const bundleSubmitResponse : any = await flashbotsProvider.sendBundle(
-        [{
-          transaction:{
-            chainId: transaction.network,
-            type: transaction.type,
-            value: ETHER / 100n * BigInt(transaction.value),
-            data: transaction.data,
-            maxFeePerGas: GWEI * transaction.maxFeePerGas,// 3n,//3
-            maxPriorityFeePerGas: GWEI * transaction.maxPriorityFeePerGas, //2n,//2
-            to: transaction.to
-          },
-          signer:WALLET
-        }],blockNumber + 1)
-        .catch((err) => {
-               __this.loading = false;
-               console.log(err);
-         });
-        console.log("bundleSubmitResponse");
-        console.log(bundleSubmitResponse);
-        console.log(await bundleSubmitResponse.wait());
-        let bsr = await bundleSubmitResponse.wait();
-        if(!bsr){
-          console.log("Successful Falshbots Bundle sent in block: " + (blockNumber + 1));
-          __this.loading = false;
-          __this.txHash = "https://goerli.etherscan.io/tx/"+bundleSubmitResponse.bundleTransactions[0].hash;
-          console.log(__this.txHash);
-          __this.successModal = true;
-          provider.off('block');
-        }
+    return new Promise((resolve, reject) => {
+      console.log(provider);
+
+      provider.on('block', async(blockNumber) => {
+        console.log("Blocknumber: " + blockNumber);
+        const bundleSubmitResponse :any = await flashbotsProvider.sendBundle(
+          [{
+            transaction:{
+              chainId: transaction.network,
+              type: transaction.type,
+              value: ETHER / 100n * BigInt(transaction.value),
+              data: transaction.data,
+              maxFeePerGas: GWEI * transaction.maxFeePerGas,// 3n,//3
+              maxPriorityFeePerGas: GWEI * transaction.maxPriorityFeePerGas, //2n,//2
+              to: transaction.to
+            },
+            signer:WALLET
+          }],blockNumber + 1)
+          .catch((err) => {
+                  console.log("Error on submitFlashbotsBundle: ",err);
+                  __this.errorAlert = true;
+                  __this.loading = false;
+                  __this.infoMessage = err.code;
+                  provider.off( 'block' )
+                  throw new Error('Throwing error on submitFlashbotsBundle');
+           });
+          let bsr = await bundleSubmitResponse.wait();
+          if(!bsr){
+            console.log("Successful Falshbots Bundle sent in block: " + (blockNumber + 1));
+            __this.loading = false;
+            __this.txHash = "https://goerli.etherscan.io/tx/"+bundleSubmitResponse.bundleTransactions[0].hash;
+            console.log(__this.txHash);
+            __this.successModal = true;
+            provider.off('block');
+          }
+        })
       })
-
-
-
-    }
+  }
 }
