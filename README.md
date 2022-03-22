@@ -1,8 +1,10 @@
 # FriendlyFlashbotsPopup
 
-This project is designed to be able to develop a Google Chrome extension to be able to send Flashbots Bundles directly from your browser.
+Welcome to FriendlyFlashbotsPopup, a Google Chrome extension to be able to send Flashbots Bundles directly from your browser.
 
-This current version is still in development and thus only interacts with the Ethereum Goerli network.
+This Google chrome extension interacts with the [Flashbots ethers-provider-flashbots-bundle repository](https://github.com/flashbots/ethers-provider-flashbots-bundle)
+
+The chrome extension is available to download [here](https://chrome.google.com/webstore/detail/flashbotsfriendlypopup/fgmlaglojmieknnjmhpkjckiabepcind?hl=en-GB&authuser=0)
 
 ## Build
 
@@ -16,6 +18,6 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
+## Contributing
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+If you have a question, feedback or a bug report for this project, please open a [new Issue](https://github.com/simonmullaney/FriendlyFlashbotsPopup/issues).
