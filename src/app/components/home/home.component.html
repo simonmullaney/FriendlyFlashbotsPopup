@@ -1,0 +1,27 @@
+<!-- Toolbar -->
+<body>
+    <div class="popupContainer z-0">
+      <div class="toolbar pt-5">
+          <div class="flex w-16 ">
+            <img src="../assets/icon.png"  width="40">
+            </div>
+            <div class="flex-auto w-48">
+              <p class="text-base">Flashbots Friendly Popup</p>
+            </div>
+            <div class="flex-auto w-32">
+              <div class="col-span-6 sm:col-span-3 pr-5">
+                <select [(ngModel)]="this.flashbotsService.selectedNetwork" class="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <option *ngFor="let item of network" [ngValue]="item">{{item.name}}</option>
+                </select>
+            </div>
+          </div>
+      </div>
+      <div class="hidden sm:block" aria-hidden="true">
+        <div class="py-0">
+          <div class="border-t border-gray-200"></div>
+        </div>
+      </div>
+      <app-form></app-form>
+    </div>
+</body>
+<script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>

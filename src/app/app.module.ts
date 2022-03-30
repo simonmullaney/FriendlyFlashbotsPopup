@@ -9,6 +9,9 @@ import { SuccessModalComponent } from './components/success-modal/success-modal.
 import { FlashbotsService } from './services/flashbots.service';
 import { FormsModule } from '@angular/forms';
 import { ErrorAlertComponent } from './components/alerts/error-alert/error-alert.component';
+import { HomeComponent } from './components/home/home.component';
+import { FormComponent } from './components/form/form.component';
+
 
 
 @NgModule({
@@ -16,8 +19,9 @@ import { ErrorAlertComponent } from './components/alerts/error-alert/error-alert
     AppComponent,
     LoaderComponent,
     SuccessModalComponent,
-    ErrorAlertComponent
-
+    ErrorAlertComponent,
+    HomeComponent,
+    FormComponent
   ],
   imports: [
     BrowserModule,

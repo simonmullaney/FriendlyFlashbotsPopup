@@ -3,6 +3,11 @@ html,body{
   opacity: 0.5;
 	margin:0;
 }
+.loaderMessage{
+	position:absolute;
+	top:30%;
+	left:30%;
+}
 .centered{
 	width:400px;
 	height:400px;

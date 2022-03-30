@@ -21,7 +21,8 @@
       "esnext",
       "dom",
       "esnext.bigint"
-    ]
+    ],
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
