@@ -2,6 +2,11 @@
   background: radial-gradient(#ffe6bd, #ffff);
   overflow:auto;
 }
+
+.far{
+  float: right;
+  padding-top: 7px;
+}
 .column {
   float: left;
 }
@@ -140,7 +145,6 @@ body
 #slides-container
 {
     white-space: nowrap;
-    padding: 10px;
 }
 
 .transactionCount{

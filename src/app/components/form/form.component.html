@@ -14,38 +14,43 @@
                     <div class="transactionCount font-semibold text-sm text-center font-sans">
                       Transaction {{i+1}}
                     </div>
-                    <div [formGroupName]="i" class="mt-5 md:mt-0 md:col-span-2">
+                    <div [formGroupName]="i" class="mt-3 md:mt-0 md:col-span-2">
                         <div class="overflow-hidden sm:rounded-md">
                           <div class="px-4 sm:p-6">
                             <app-error-alert *ngIf="this.flashbotsService.errorAlert"></app-error-alert>
-                            <div class="grid grid-cols-6 gap-3">
+                            <div class="grid grid-cols-6 gap-2">
                               <div class="form-group col-span-6 sm:col-span-3">
                                 <label for="privateKey" class="label-control block text-sm font-medium text-gray-700">Private Key:</label>
                                 <input type="password"formControlName="privateKey" name="privateKey" placeholder="Sending parties private key" id="privateKey" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
                               <div class="form-group col-span-6 sm:col-span-3">
                                 <label for="to" class="label-control block text-sm font-medium text-gray-700">To:</label>
-                                <input type="text" formControlName="to" name="to" id="to" placeholder="Receiving party of the transaction, could be a contract address" autocomplete="accTo" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <input type="text" formControlName="to" name="to" id="to" placeholder="Receiving transaction address" autocomplete="accTo" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
 
                               <div class="form-group col-span-6 sm:col-span-3">
-                                <label for="value" class="label-control block text-sm font-medium text-gray-700">Value:</label>
-                                <input type="text" formControlName="value" name="value" id="value" autocomplete="value" placeholder="Value in hundredths of Ether i.e. 3 = 0.03 Ether" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <label for="value" class="label-control block text-sm font-medium text-gray-700">Value: <i class="far fa-question-circle" title="Wei Unit Converter" (click)="openURL()"></i></label>
+                                <input type="text" formControlName="value" name="value" id="value" autocomplete="value" placeholder="Value in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
 
                               <div class="form-group col-span-6 sm:col-span-3">
                                 <label for="transactionType" class="label-control block text-sm font-medium text-gray-700">Transaction Type:</label>
-                                <input type="transactionType" formControlName="transactionType" name="transactionType" id="transactionType" autocomplete="transactionType" placeholder="Ethereum transaction type (1: Pre-EIP  1559, 2: EIP 1559)" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <input type="transactionType" formControlName="transactionType" name="transactionType" id="transactionType" autocomplete="transactionType" placeholder="Transaction type (1: Pre-EIP 1559, 2: EIP 1559)" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                              </div>
+
+                              <div class="form-group col-span-6 sm:col-span-3">
+                                <label for="gasLimit" class="label-control block text-sm font-medium text-gray-700">Gas Limit:</label>
+                                <input type="gasLimit" formControlName="gasLimit" name="gasLimit" id="gasLimit" autocomplete="gasLimit" placeholder="Gas Limit" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
 
                               <div class="form-group col-span-6">
-                                <label for="maxFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Fee Per Gas</label>
-                                <input type="text" formControlName="maxFeePerGas" name="maxFeePerGas" id="maxFeePerGas" autocomplete="maxFeePerGas" placeholder="Value in Gwei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <label for="maxFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Fee Per Gas<i class="far fa-question-circle" title="Wei Unit Converter" (click)="openURL()"></i></label>
+                                <input type="text" formControlName="maxFeePerGas" name="maxFeePerGas" id="maxFeePerGas" autocomplete="maxFeePerGas" placeholder="Value in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
 
                               <div class="form-group col-span-6 sm:col-span-6 lg:col-span-2">
-                                <label for="maxPriorityFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Priority Fee Per Gas:</label>
-                                <input type="text" formControlName="maxPriorityFeePerGas" name="maxPriorityFeePerGas" id="maxPriorityFeePerGas" autocomplete="maxPriorityFeePerGas" placeholder="Value in Gwei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <label for="maxPriorityFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Priority Fee Per Gas:<i class="far fa-question-circle" title="Wei Unit Converter" (click)="openURL()"></i></label>
+                                <input type="text" formControlName="maxPriorityFeePerGas" name="maxPriorityFeePerGas" id="maxPriorityFeePerGas" autocomplete="maxPriorityFeePerGas" placeholder="Value in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
 
                               <div class="form-group col-span-6 sm:col-span-3 lg:col-span-2">
@@ -67,38 +72,43 @@
                   <div class="transactionCount font-semibold text-sm text-center font-sans">
                     Transaction {{i+1}}
                   </div>
-                  <div [formGroupName]="i" class="mt-5 md:mt-0 md:col-span-2">
+                  <div [formGroupName]="i" class="mt-3 md:mt-0 md:col-span-2">
                       <div class="overflow-hidden sm:rounded-md">
                         <div class="px-4 sm:p-6">
                           <app-error-alert *ngIf="this.flashbotsService.errorAlert"></app-error-alert>
-                          <div class="grid grid-cols-6 gap-3">
+                          <div class="grid grid-cols-6 gap-2">
                             <div class="form-group col-span-6 sm:col-span-3">
                               <label for="privateKey" class="label-control block text-sm font-medium text-gray-700">Private Key:</label>
                               <input type="password"formControlName="privateKey" name="privateKey" placeholder="Sending parties private key" id="privateKey" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
                             <div class="form-group col-span-6 sm:col-span-3">
                               <label for="to" class="label-control block text-sm font-medium text-gray-700">To:</label>
-                              <input type="text" formControlName="to" name="to" id="to" placeholder="Receiving party of the transaction, could be a contract address" autocomplete="accTo" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                              <input type="text" formControlName="to" name="to" id="to" placeholder="Receiving transaction address" autocomplete="accTo" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="form-group col-span-6 sm:col-span-3">
-                              <label for="value" class="label-control block text-sm font-medium text-gray-700">Value:</label>
-                              <input type="text" formControlName="value" name="value" id="value" autocomplete="value" placeholder="Value in hundredths of Ether i.e. 3 = 0.03 Ether" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                              <label for="value" class="label-control block text-sm font-medium text-gray-700">Value:<i class="far fa-question-circle" title="Wei Unit Converter" (click)="openURL()"></i></label>
+                              <input type="text" formControlName="value" name="value" id="value" autocomplete="value" placeholder="Value in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="form-group col-span-6 sm:col-span-3">
                               <label for="transactionType" class="label-control block text-sm font-medium text-gray-700">Transaction Type:</label>
-                              <input type="transactionType" formControlName="transactionType" name="transactionType" id="transactionType" autocomplete="transactionType" placeholder="Ethereum transaction type (1: Pre-EIP  1559, 2: EIP 1559)" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                              <input type="transactionType" formControlName="transactionType" name="transactionType" id="transactionType" autocomplete="transactionType" placeholder="Transaction type (1: Pre-EIP 1559, 2: EIP 1559)" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            </div>
+
+                            <div class="form-group col-span-6 sm:col-span-3">
+                              <label for="gasLimit" class="label-control block text-sm font-medium text-gray-700">Gas Limit:</label>
+                              <input type="gasLimit" formControlName="gasLimit" name="gasLimit" id="gasLimit" autocomplete="gasLimit" placeholder="Gas Limit" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="form-group col-span-6">
-                              <label for="maxFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Fee Per Gas</label>
-                              <input type="text" formControlName="maxFeePerGas" name="maxFeePerGas" id="maxFeePerGas" autocomplete="maxFeePerGas" placeholder="Value in Gwei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                              <label for="maxFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Fee Per Gas<i class="far fa-question-circle" title="Wei Unit Converter" (click)="openURL()"></i></label>
+                              <input type="text" formControlName="maxFeePerGas" name="maxFeePerGas" id="maxFeePerGas" autocomplete="maxFeePerGas" placeholder="Value in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="form-group col-span-6 sm:col-span-6 lg:col-span-2">
-                              <label for="maxPriorityFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Priority Fee Per Gas:</label>
-                              <input type="text" formControlName="maxPriorityFeePerGas" name="maxPriorityFeePerGas" id="maxPriorityFeePerGas" autocomplete="maxPriorityFeePerGas" placeholder="Value in Gwei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                              <label for="maxPriorityFeePerGas" class="label-control block text-sm font-medium text-gray-700">Max Priority Fee Per Gas:<i class="far fa-question-circle" title="Wei Unit Converter" (click)="openURL()"></i></label>
+                              <input type="text" formControlName="maxPriorityFeePerGas" name="maxPriorityFeePerGas" id="maxPriorityFeePerGas" autocomplete="maxPriorityFeePerGas" placeholder="Value in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             </div>
 
                             <div class="form-group col-span-6 sm:col-span-3 lg:col-span-2">
@@ -112,7 +122,6 @@
                   </div>
 
                 </div>
-                <!-- <div formArrayName="arr" *ngFor="let a of myForm.get('arr').controls; let i = index"> -->
               </div>
                 <button type="button" (click)="animateSliderDecrement()" class=" z-10 bg-indigo-60 flex absolute top-0 left-0 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none" data-carousel-prev>
               <span class="z-10 inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-indigo-60  dark:bg-gray-800/30 group-hover:bg-indigo-60  dark:group-hover:bg-indigo-60  group-focus:ring-4 group-focus:ring-indigo-60 dark:group-focus:ring-gray-800/70 group-focus:outline-none">

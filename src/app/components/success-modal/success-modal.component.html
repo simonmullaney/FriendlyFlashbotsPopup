@@ -17,7 +17,7 @@
         <div class="mt-3 text-center sm:mt-5">
           <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Flashbots Bundle Submitted!</h3>
           <div class="mt-2">
-            <div class="successfulBundleTransaction" *ngFor="let tx of this.flashbotsService.txHashArr; let i = index">
+            <div class="successfulBundleTransaction pb-2 text-[10px]" *ngFor="let tx of this.flashbotsService.txHashArr; let i = index">
               <a href= "{{tx}}" target="_blank" rel="noopener noreferrer">Click to view transaction number {{i+1}}</a>
             </div>
           </div>

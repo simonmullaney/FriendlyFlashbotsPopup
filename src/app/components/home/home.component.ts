@@ -9,7 +9,6 @@ import { FlashbotsService } from '../../services/flashbots.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  selectedNetwork:any;
   network:Array<any> = [
       {id: 1, name: "Mainnet"},
       {id: 5, name: "Goerli"}
@@ -20,7 +19,9 @@ export class HomeComponent implements OnInit {
   ){ }
 
   ngOnInit(): void {
-    this.selectedNetwork = this.network[0];
+    this.flashbotsService.selectedNetwork = this.network[0];
+    console.log(this.flashbotsService.selectedNetwork);
+
   }
 
 }

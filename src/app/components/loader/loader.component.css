@@ -3,10 +3,22 @@ html,body{
   opacity: 0.5;
 	margin:0;
 }
-.loaderMessage{
-	position:absolute;
-	top:30%;
-	left:30%;
+.updates{
+	padding-top: 6px;
+  padding-left: 38px;
+}
+.info {
+	position: absolute;
+  top: 25%;
+  left: 12%;
+	opacity: 85%;
+	width: 300px;
+}
+.infoMessage{
+	border-radius: 10px;
+	background: #0ff;
+	max-height: 120px;
+	overflow: hidden;
 }
 .centered{
 	width:400px;

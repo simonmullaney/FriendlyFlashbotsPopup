@@ -29,8 +29,6 @@ export class FormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.flashbotsService.selectedNetwork = this.network[0];
-
     this.myGroup = this.fb.group({
       transactionArray: this.fb.array([this.createBundleForm()])
     })
@@ -57,12 +55,20 @@ export class FormComponent implements OnInit {
     let transactionBundle:any;
     console.log("Form Values: ",this.myGroup.value);
     transactionBundle = this.myGroup.value;
+    this.flashbotsService.bundleWaitMessage = [];
 
-    this.flashbotsService.submitFlashbotsBundle(transactionBundle)
+
+    let simulate = await this.flashbotsService.simulateFlashbotBundle(transactionBundle);
+    console.log("FINISHED simulation,  in handle submit");
+
+    await this.flashbotsService.submitFlashbotsBundle(transactionBundle)
       .catch(function(err){
-        console.log('Error: ', err);
+        // console.log('Error: ', err);
         __this.flashbotsService.errorAlert = true;
         __this.flashbotsService.loading = false;
+        __this.flashbotsService.errorAlert = true;
+        __this.flashbotsService.loading = false;
+        __this.flashbotsService.infoMessage = err;
       });
   }
 
@@ -92,6 +98,10 @@ export class FormComponent implements OnInit {
         'margin-left': -(95 * __this.animateNumber) + '%'
       });
     }
+  }
+  openURL(){
+    console.log("Opening openURL");
+     window.open('https://etherscan.io/unitconverter','_blank')
   }
 
   animateSliderIncrement() {

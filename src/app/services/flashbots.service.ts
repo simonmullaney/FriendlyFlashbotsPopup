@@ -5,8 +5,6 @@ import { FlashbotsBundleProvider } from "@flashbots/ethers-provider-bundle";
 const FLASHBOTS_GOERLI_ENDPOINT = "https://relay-goerli.flashbots.net/";
 const GWEI = 10n ** 9n;
 const ETHER = 10n ** 18n
-// const GWEI = BigInt(BigNumber.from(10).pow(9))
-// const ETHER = BigInt(BigNumber.from(10).pow(18))
 
 
 @Injectable({
@@ -19,13 +17,97 @@ export class FlashbotsService {
   txHashArr:any=[];
   infoMessage: String = "Error, please retry again";
   selectedNetwork:any;
-  bundleWaitMessage:any =["Submitting bundle to block number: 300001"];
+  bundleWaitMessage:any =[];
 
   constructor() { }
 
+
+  async simulateFlashbotBundle(transactionBundle:any){
+
+
+
+    console.log("SIMULATING - Selected Network: "+ this.selectedNetwork.id +"Transaction bundle: ",transactionBundle);
+    const provider = new providers.InfuraProvider(this.selectedNetwork.id);
+    this.loading = true;
+    let WALLET:any;
+
+    try {
+      WALLET = new Wallet(transactionBundle.transactionArray[0].privateKey,provider)
+    } catch (err) {
+      console.log("Error on simulating creating Wallet: ",err);
+      this.errorAlert = true;
+      this.loading = false;
+      this.infoMessage = err.code;
+      throw new Error('Throwing error simulating creating Wallet');
+    }
+
+    // Standard json rpc provider directly from ethers.js (NOT Flashbots)
+    const flashbotsProvider = await FlashbotsBundleProvider.create(provider,Wallet.createRandom(),FLASHBOTS_GOERLI_ENDPOINT).catch((err) => {
+        console.log("Error on creating flashbot provider: ",err);
+        __this.errorAlert = true;
+        __this.loading = false;
+        __this.infoMessage = err.code;
+        provider.off( 'block' )
+        throw new Error('Throwing error on creating flashbot provider');
+     });
+    var __this = this;
+    let submittedTransactionArray:any = [];
+
+    for(let i=0;i<transactionBundle.transactionArray.length;i++){
+      let transaction:any = {};
+      // console.log("Looping through transactionBundle, iteration: ",i," for transaction: ",transaction);
+      transaction.chainId = this.selectedNetwork.id;
+      transaction.type = Number(transactionBundle.transactionArray[i].transactionType);
+      transaction.value = BigInt(transactionBundle.transactionArray[i].value);
+      transaction.data = transactionBundle.transactionArray[i].data;
+      transaction.gasLimit = BigInt(transactionBundle.transactionArray[i].gasLimit);
+      transaction.maxFeePerGas = BigInt(transactionBundle.transactionArray[i].maxFeePerGas);
+      transaction.maxPriorityFeePerGas = BigInt(transactionBundle.transactionArray[i].maxPriorityFeePerGas);
+      transaction.to = transactionBundle.transactionArray[i].to;
+
+      // transaction.gasLimit = 50000000;
+      submittedTransactionArray.push({transaction:transaction, signer:WALLET})
+    }
+
+    return new Promise(resolve => {
+        provider.once('block', async(blockNumber) => {
+          __this.bundleWaitMessage.unshift("\nSimulating transaction...")
+          const signedTransactions = await flashbotsProvider.signBundle(submittedTransactionArray).catch((err) => {
+              console.log("Error on SIMULATE signing FlashbotsBundle: ",err);
+              __this.errorAlert = true;
+              __this.loading = false;
+              __this.infoMessage = err.code;
+              provider.off( 'block' )
+              throw new Error('Throwing error SIMULATE signing FlashbotsBundle');
+           });
+          let simulate :any = await flashbotsProvider.simulate(signedTransactions,blockNumber + 1).catch((err) => {
+              console.log("Error on SIMULATE FlashbotsBundle: ",err);
+              __this.errorAlert = true;
+              __this.loading = false;
+              __this.infoMessage = err.code;
+              provider.off( 'block' )
+              throw new Error('Throwing error on submitFlashbotsBundle');
+           });
+          console.log(simulate)
+          if(simulate.error){
+            __this.errorAlert = true;
+            __this.loading = false;
+            __this.infoMessage = simulate.error.message;
+            provider.off( 'block' )
+            throw new Error('Throwing error on simulate transaction');
+          }else{
+            provider.off( 'block' )
+            console.log("SUCCESS, FINISHED SIMULATING");
+            __this.bundleWaitMessage.unshift("\nSuccess, finished simulating...")
+          }
+          resolve(simulate)
+        })
+    });
+  }
+
   async submitFlashbotsBundle(transactionBundle:any) {
-    console.log("Selected Network: "+ this.selectedNetwork.id +"Transaction bundle: ",transactionBundle);
-    console.log(transactionBundle.transactionArray);
+    // console.log("Selected Network: "+ this.selectedNetwork.id +"Transaction bundle: ",transactionBundle);
+    // console.log(transactionBundle.transactionArray);
 
     const provider = new providers.InfuraProvider(this.selectedNetwork.id);
     this.loading = true;
@@ -38,13 +120,14 @@ export class FlashbotsService {
 
     for(let i=0;i<transactionBundle.transactionArray.length;i++){
       let transaction:any = {};
-      console.log("Looping through transactionBundle, iteration: ",i," for transaction: ",transaction);
+      // console.log("Looping through transactionBundle, iteration: ",i," for transaction: ",transaction);
       transaction.chainId = this.selectedNetwork.id;
       transaction.type = Number(transactionBundle.transactionArray[i].transactionType);
-      transaction.value = ETHER / 100n * BigInt(transactionBundle.transactionArray[i].value);
+      transaction.value = BigInt(transactionBundle.transactionArray[i].value);
       transaction.data = transactionBundle.transactionArray[i].data;
-      transaction.maxFeePerGas = GWEI * BigInt(transactionBundle.transactionArray[i].maxFeePerGas);
-      transaction.maxPriorityFeePerGas = GWEI * BigInt(transactionBundle.transactionArray[i].maxPriorityFeePerGas);
+      transaction.gasLimit = BigInt(transactionBundle.transactionArray[i].gasLimit);
+      transaction.maxFeePerGas = BigInt(transactionBundle.transactionArray[i].maxFeePerGas);
+      transaction.maxPriorityFeePerGas = BigInt(transactionBundle.transactionArray[i].maxPriorityFeePerGas);
       transaction.to = transactionBundle.transactionArray[i].to;
 
       // transaction.gasLimit = 50000000;
@@ -54,31 +137,51 @@ export class FlashbotsService {
     return new Promise((resolve, reject) => {
       console.log(provider);
       provider.on('block', async(blockNumber) => {
-        console.log("Blocknumber: " + blockNumber);
-        console.log("submittedTransactionArray: ",submittedTransactionArray);
+        // console.log("Blocknumber: " + blockNumber);
+        // console.log("submittedTransactionArray: ",submittedTransactionArray);
+        __this.bundleWaitMessage.unshift("\nSubmitting bundle to block number: " + blockNumber)
 
-        __this.bundleWaitMessage.push("Submitting bundle to block number: " + blockNumber)
+
+        // const signedTransactions = await flashbotsProvider.signBundle(submittedTransactionArray)
+        // let simulate :any = await flashbotsProvider.simulate(signedTransactions,blockNumber + 1);
+        // console.log(simulate)
+        // if(simulate.error){
+        //   __this.errorAlert = true;
+        //   __this.loading = false;
+        //   __this.infoMessage = simulate.error.message;
+        //   console.log(simulate.firstRevert);
+        //   console.log(simulate.firstRevert.error);
+        //   provider.off( 'block' )
+        //   throw new Error('Throwing error on simulate transaction');
+        // }
+        // else if (simulate.firstRevert){
+        //   __this.errorAlert = true;
+        //   __this.loading = false;
+        //   __this.infoMessage = simulate.firstRevert.error;
+        //   provider.off( 'block' )
+        //   throw new Error('Throwing error on simulate transaction');
+        //   }
 
         const bundleSubmitResponse :any = await flashbotsProvider.sendBundle(
           submittedTransactionArray,blockNumber + 1)
           .catch((err) => {
-                  console.log("Error on submitFlashbotsBundle: ",err);
-                  __this.errorAlert = true;
-                  __this.loading = false;
-                  __this.infoMessage = err.code;
-                  provider.off( 'block' )
-                  throw new Error('Throwing error on submitFlashbotsBundle');
+              console.log("Error on submitFlashbotsBundle: ",err);
+              __this.errorAlert = true;
+              __this.loading = false;
+              __this.infoMessage = err.code;
+              provider.off( 'block' )
+              throw new Error('Throwing error on submitFlashbotsBundle');
            });
+
           let bsr = await bundleSubmitResponse.wait();
-          console.log("bundleSubmitResponse",bsr);
 
           if(!bsr){
             console.log("Successful Falshbots Bundle sent in block: " + (blockNumber + 1));
             __this.loading = false;
 
-            console.log(bundleSubmitResponse);
-            console.log(bundleSubmitResponse.bundleTransactions);
-            console.log(bundleSubmitResponse.bundleTransactions.length);
+            // console.log(bundleSubmitResponse);
+            // console.log(bundleSubmitResponse.bundleTransactions);
+            // console.log(bundleSubmitResponse.bundleTransactions.length);
 
             for(let j=0;j<bundleSubmitResponse.bundleTransactions.length;j++){
               if (__this.selectedNetwork.id == 1) {
@@ -91,10 +194,9 @@ export class FlashbotsService {
             console.log("bundleSubmitResponse: ",bundleSubmitResponse);
             console.log("txHashArr: ",__this.txHashArr);
             __this.successModal = true;
-            provider.off('block');
-          } else{
-            __this.bundleWaitMessage = [];
+            console.log("provider: ", provider);
 
+            provider.off('block');
           }
         })
       })
