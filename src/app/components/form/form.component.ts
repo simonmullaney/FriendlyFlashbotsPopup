@@ -17,7 +17,7 @@ export class FormComponent implements OnInit {
   addMultipleTransactions: boolean = false;
   animateNumber: number = 0;
   bundleTransactions:any;
-  numBundleTansactions: number = 1;
+  numBundleTansactions: number = 0;
   myGroup: FormGroup;
   transactionArray: FormArray;
 
@@ -53,14 +53,12 @@ export class FormComponent implements OnInit {
   async handleSubmit() {
     var __this = this;
     let transactionBundle:any;
-    console.log("Form Values: ",this.myGroup.value);
+    // console.log("Form Values: ",this.myGroup.value);
     transactionBundle = this.myGroup.value;
     this.flashbotsService.bundleWaitMessage = [];
 
-
     let simulate = await this.flashbotsService.simulateFlashbotBundle(transactionBundle);
-    console.log("FINISHED simulation,  in handle submit");
-
+    // console.log("FINISHED simulation,  in handle submit");
     await this.flashbotsService.submitFlashbotsBundle(transactionBundle)
       .catch(function(err){
         // console.log('Error: ', err);
@@ -73,34 +71,51 @@ export class FormComponent implements OnInit {
   }
 
   addTransactiontoBundle(){
-    console.log("Adding transaction to bundle");
+    // console.log("Adding transaction to bundle");
     this.numBundleTansactions = this.numBundleTansactions + 1;
+    // console.log("addTransactiontoBundle __this.animateNumber",this.animateNumber);
+    // console.log("addTransactiontoBundle __this.numBundleTansactions",this.numBundleTansactions);
     this.bundleTransactions = Array(this.numBundleTansactions);
     this.addMultipleTransactions = true;
+    this.transactionArray = this.myGroup.get('transactionArray') as FormArray;
+    // console.log('this.transactionArray');
+    // console.log(this.transactionArray);
+    this.transactionArray.push(this.createBundleForm());
+  }
+
+  removeTransactionFromBundle(transactionIndex:any){
+    // console.log("Removing transaction from bundle at index: ",transactionIndex);
+    this.numBundleTansactions = this.numBundleTansactions -1;
+    this.animateNumber = this.animateNumber - 1;
+    // console.log("removeTransactionFromBundle __this.animateNumber",this.animateNumber);
+    // console.log("removeTransactionFromBundle __this.numBundleTansactions",this.numBundleTansactions);
+    this.bundleTransactions = Array(this.numBundleTansactions);
+    if (this.bundleTransactions.length < 1){
+      this.addMultipleTransactions = false;
+    }
 
     this.transactionArray = this.myGroup.get('transactionArray') as FormArray;
-    console.log('this.transactionArray');
-    console.log(this.transactionArray);
-
-    this.transactionArray.push(this.createBundleForm());
-
-
+    // console.log('this.transactionArray');
+    // console.log(this.transactionArray);
+    this.transactionArray.removeAt(transactionIndex);
   }
 
   animateSliderDecrement() {
     // console.log("In animateSliderDecrement");
     let __this = this;
-    console.log(__this.animateNumber);
+    // console.log("DECR __this.animateNumber",__this.animateNumber);
+    // console.log("INC __this.numBundleTansactions",this.numBundleTansactions);
+
     if (__this.animateNumber > 0) {
       __this.animateNumber = __this.animateNumber - 1;
-      console.log(__this.animateNumber);
+      // console.log(__this.animateNumber);
       $('#slides-container').animate({
         'margin-left': -(95 * __this.animateNumber) + '%'
       });
     }
   }
   openURL(){
-    console.log("Opening openURL");
+     // console.log("Opening openURL");
      window.open('https://etherscan.io/unitconverter','_blank')
   }
 
@@ -108,10 +123,11 @@ export class FormComponent implements OnInit {
     // console.log("In animateSliderIncrement");
 
     let __this = this;
-    console.log(__this.animateNumber);
-    if (__this.animateNumber < this.numBundleTansactions -1) {
+    // console.log("INC __this.animateNumber",__this.animateNumber);
+    // console.log("INC __this.numBundleTansactions",this.numBundleTansactions);
+    if (__this.animateNumber < this.numBundleTansactions) {
       __this.animateNumber = __this.animateNumber + 1;
-      console.log(__this.animateNumber);
+      // console.log(__this.animateNumber);
       $('#slides-container').animate({
         'margin-left': - (95 * __this.animateNumber) + '%'
       });

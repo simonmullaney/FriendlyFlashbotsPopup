@@ -18,21 +18,19 @@ export class FlashbotsService {
   infoMessage: String = "Error, please retry again";
   selectedNetwork:any;
   bundleWaitMessage:any =[];
+  provider:any;
 
   constructor() { }
 
 
   async simulateFlashbotBundle(transactionBundle:any){
-
-
-
-    console.log("SIMULATING - Selected Network: "+ this.selectedNetwork.id +"Transaction bundle: ",transactionBundle);
-    const provider = new providers.InfuraProvider(this.selectedNetwork.id);
+    // console.log("SIMULATING - Selected Network: "+ this.selectedNetwork.id +"Transaction bundle: ",transactionBundle);
+    this.provider = new providers.InfuraProvider(this.selectedNetwork.id);
     this.loading = true;
     let WALLET:any;
 
     try {
-      WALLET = new Wallet(transactionBundle.transactionArray[0].privateKey,provider)
+      WALLET = new Wallet(transactionBundle.transactionArray[0].privateKey,this.provider)
     } catch (err) {
       console.log("Error on simulating creating Wallet: ",err);
       this.errorAlert = true;
@@ -42,17 +40,16 @@ export class FlashbotsService {
     }
 
     // Standard json rpc provider directly from ethers.js (NOT Flashbots)
-    const flashbotsProvider = await FlashbotsBundleProvider.create(provider,Wallet.createRandom(),FLASHBOTS_GOERLI_ENDPOINT).catch((err) => {
+    const flashbotsProvider = await FlashbotsBundleProvider.create(this.provider,Wallet.createRandom(),FLASHBOTS_GOERLI_ENDPOINT).catch((err) => {
         console.log("Error on creating flashbot provider: ",err);
         __this.errorAlert = true;
         __this.loading = false;
         __this.infoMessage = err.code;
-        provider.off( 'block' )
+        __this.provider.off( 'block' )
         throw new Error('Throwing error on creating flashbot provider');
      });
     var __this = this;
     let submittedTransactionArray:any = [];
-
     for(let i=0;i<transactionBundle.transactionArray.length;i++){
       let transaction:any = {};
       // console.log("Looping through transactionBundle, iteration: ",i," for transaction: ",transaction);
@@ -70,14 +67,14 @@ export class FlashbotsService {
     }
 
     return new Promise(resolve => {
-        provider.once('block', async(blockNumber) => {
+        this.provider.once('block', async(blockNumber:any) => {
           __this.bundleWaitMessage.unshift("\nSimulating transaction...")
           const signedTransactions = await flashbotsProvider.signBundle(submittedTransactionArray).catch((err) => {
               console.log("Error on SIMULATE signing FlashbotsBundle: ",err);
               __this.errorAlert = true;
               __this.loading = false;
               __this.infoMessage = err.code;
-              provider.off( 'block' )
+              __this.provider.off( 'block' )
               throw new Error('Throwing error SIMULATE signing FlashbotsBundle');
            });
           let simulate :any = await flashbotsProvider.simulate(signedTransactions,blockNumber + 1).catch((err) => {
@@ -85,18 +82,18 @@ export class FlashbotsService {
               __this.errorAlert = true;
               __this.loading = false;
               __this.infoMessage = err.code;
-              provider.off( 'block' )
+              __this.provider.off( 'block' )
               throw new Error('Throwing error on submitFlashbotsBundle');
            });
-          console.log(simulate)
+          // console.log(simulate)
           if(simulate.error){
             __this.errorAlert = true;
             __this.loading = false;
             __this.infoMessage = simulate.error.message;
-            provider.off( 'block' )
+            __this.provider.off( 'block' )
             throw new Error('Throwing error on simulate transaction');
           }else{
-            provider.off( 'block' )
+            __this.provider.off( 'block' )
             console.log("SUCCESS, FINISHED SIMULATING");
             __this.bundleWaitMessage.unshift("\nSuccess, finished simulating...")
           }
@@ -109,12 +106,12 @@ export class FlashbotsService {
     // console.log("Selected Network: "+ this.selectedNetwork.id +"Transaction bundle: ",transactionBundle);
     // console.log(transactionBundle.transactionArray);
 
-    const provider = new providers.InfuraProvider(this.selectedNetwork.id);
+    this.provider = new providers.InfuraProvider(this.selectedNetwork.id);
     this.loading = true;
-    const WALLET = new Wallet(transactionBundle.transactionArray[0].privateKey,provider);
+    const WALLET = new Wallet(transactionBundle.transactionArray[0].privateKey,this.provider);
 
     // Standard json rpc provider directly from ethers.js (NOT Flashbots)
-    const flashbotsProvider = await FlashbotsBundleProvider.create(provider,Wallet.createRandom(),FLASHBOTS_GOERLI_ENDPOINT);
+    const flashbotsProvider = await FlashbotsBundleProvider.create(this.provider,Wallet.createRandom(),FLASHBOTS_GOERLI_ENDPOINT);
     var __this = this;
     let submittedTransactionArray:any = [];
 
@@ -135,32 +132,11 @@ export class FlashbotsService {
     }
 
     return new Promise((resolve, reject) => {
-      console.log(provider);
-      provider.on('block', async(blockNumber) => {
+      // console.log(provider);
+      this.provider.on('block', async(blockNumber:any) => {
         // console.log("Blocknumber: " + blockNumber);
         // console.log("submittedTransactionArray: ",submittedTransactionArray);
         __this.bundleWaitMessage.unshift("\nSubmitting bundle to block number: " + blockNumber)
-
-
-        // const signedTransactions = await flashbotsProvider.signBundle(submittedTransactionArray)
-        // let simulate :any = await flashbotsProvider.simulate(signedTransactions,blockNumber + 1);
-        // console.log(simulate)
-        // if(simulate.error){
-        //   __this.errorAlert = true;
-        //   __this.loading = false;
-        //   __this.infoMessage = simulate.error.message;
-        //   console.log(simulate.firstRevert);
-        //   console.log(simulate.firstRevert.error);
-        //   provider.off( 'block' )
-        //   throw new Error('Throwing error on simulate transaction');
-        // }
-        // else if (simulate.firstRevert){
-        //   __this.errorAlert = true;
-        //   __this.loading = false;
-        //   __this.infoMessage = simulate.firstRevert.error;
-        //   provider.off( 'block' )
-        //   throw new Error('Throwing error on simulate transaction');
-        //   }
 
         const bundleSubmitResponse :any = await flashbotsProvider.sendBundle(
           submittedTransactionArray,blockNumber + 1)
@@ -169,14 +145,14 @@ export class FlashbotsService {
               __this.errorAlert = true;
               __this.loading = false;
               __this.infoMessage = err.code;
-              provider.off( 'block' )
+              __this.provider.off( 'block' )
               throw new Error('Throwing error on submitFlashbotsBundle');
            });
 
           let bsr = await bundleSubmitResponse.wait();
 
           if(!bsr){
-            console.log("Successful Falshbots Bundle sent in block: " + (blockNumber + 1));
+            // console.log("Successful Falshbots Bundle sent in block: " + (blockNumber + 1));
             __this.loading = false;
 
             // console.log(bundleSubmitResponse);
@@ -191,14 +167,22 @@ export class FlashbotsService {
                 __this.txHashArr.push("https://goerli.etherscan.io/tx/"+bundleSubmitResponse.bundleTransactions[j].hash);
               }
             }
-            console.log("bundleSubmitResponse: ",bundleSubmitResponse);
-            console.log("txHashArr: ",__this.txHashArr);
+            // console.log("bundleSubmitResponse: ",bundleSubmitResponse);
+            // console.log("txHashArr: ",__this.txHashArr);
             __this.successModal = true;
-            console.log("provider: ", provider);
+            // console.log("provider: ", provider);
 
-            provider.off('block');
+            __this.provider.off('block');
           }
         })
       })
+  }
+
+  cancelFlashbotsBundle(){
+    console.log("Canceling Flashbots Bundle");
+    this.bundleWaitMessage = [];
+    this.provider.off( 'block' )
+    this.loading = false;
+
   }
 }

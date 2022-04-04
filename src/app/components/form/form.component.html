@@ -40,7 +40,7 @@
 
                               <div class="form-group col-span-6 sm:col-span-3">
                                 <label for="gasLimit" class="label-control block text-sm font-medium text-gray-700">Gas Limit:</label>
-                                <input type="gasLimit" formControlName="gasLimit" name="gasLimit" id="gasLimit" autocomplete="gasLimit" placeholder="Gas Limit" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <input type="gasLimit" formControlName="gasLimit" name="gasLimit" id="gasLimit" autocomplete="gasLimit" placeholder="Gas Limit in Wei" class="mt-1 focus:ring-indigo-500 border-black focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                               </div>
 
                               <div class="form-group col-span-6">
@@ -70,7 +70,7 @@
               <div id="slides-container" class="overflow-hidden relative rounded-lg rounded-2xl px-1">
                 <div id="bundleFormMultiple" formArrayName="transactionArray" *ngFor="let a of getControls(); let i = index" class="bundleFormMultiple md:grid md:grid-cols-6 md:gap-6 rounded-2xl border shadow p-3">
                   <div class="transactionCount font-semibold text-sm text-center font-sans">
-                    Transaction {{i+1}}
+                    Transaction {{i+1}} <i class="fa-solid fa-xmark" title="Remove transaction from bundle" (click)="removeTransactionFromBundle(i)"></i>
                   </div>
                   <div [formGroupName]="i" class="mt-3 md:mt-0 md:col-span-2">
                       <div class="overflow-hidden sm:rounded-md">
