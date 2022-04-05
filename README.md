@@ -21,3 +21,5 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Contributing
 
 If you have a question, feedback or a bug report for this project, please open a [new Issue](https://github.com/simonmullaney/FriendlyFlashbotsPopup/issues).
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/simonmullaney)
